@@ -18,8 +18,8 @@
         }
         .card {
             background: #1e1e1e;
-            padding: 30px;
-            border-radius: 15px;
+            padding: 90px;
+            border-radius: 90px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             text-align: center;
             max-width: 400px;
@@ -29,8 +29,8 @@
         p { line-height: 1.6; color: #bbb; }
         .btn {
             display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
+            margin-top: 69px;
+            padding: 10px 70px;
             background: #00d4ff;
             color: #121212;
             text-decoration: none;
@@ -45,9 +45,302 @@
 
     <div class="card">
         <h1>Halo, Saya Saputro!</h1>
-        <p>Selamat datang di website pertama saya yang dihosting langsung melalui GitHub Pages menggunakan MacBook M2.</p>
+        <p>Selamat datang di Website Kementerian Keuangan ======= Website di buat secara infra untuk kebutuhan internal yang menggunakan infra PDN dengan total fram 60px dan sudah terintegrasi oleh jaringan Telkom.</p>
         <a href="https://github.com/saputro97" class="btn">Kunjungi Profil GitHub</a>
     </div>
+import { Metadata } from "next"
+import { 
+  Activity, 
+  CreditCard, 
+  DollarSign, 
+  Download, 
+  Users, 
+  ArrowUpRight, 
+  ArrowDownRight 
+} from "lucide-react"
 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from "@/components/ui/button"
+import { OverviewChart } from "@/components/dashboard/overview-chart"
+import { RecentSales } from "@/components/dashboard/recent-sales"
+import { PieChartComponent } from "@/components/dashboard/pie-chart"
+
+export const metadata: Metadata = {
+  title: "Enterprise Dashboard | Admin Panel",
+  description: "Advanced analytics and management dashboard.",
+}
+
+export default function DashboardPage() {
+  return (
+    <div className="flex-1 space-y-4 p-8 pt-6">
+      {/* HEADER SECTION */}
+      <div className="flex items-center justify-between space-y-2">
+        <h2 className="text-3xl font-bold tracking-tight">Analytics Overview</h2>
+        <div className="flex items-center space-x-2">
+          <Button size="sm" variant="outline">
+            Jan 01, 2024 - Jan 30, 2024
+          </Button>
+          <Button size="sm">
+            <Download className="mr-2 h-4 w-4" /> Download Report
+          </Button>
+        </div>
+      </div>
+
+      {/* TABS SYSTEM */}
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList className="bg-slate-100 p-1">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="reports">Reports</TabsTrigger>
+          <TabsTrigger value="notifications" disabled>Notifications</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-4">
+          {/* KPI CARDS GRID */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <StatsCard 
+              title="Total Revenue" 
+              value="$45,231.89" 
+              description="+20.1% from last month" 
+              icon={<DollarSign className="h-4 w-4 text-muted-foreground" />}
+              trend="up"
+            />
+            <StatsCard 
+              title="Subscriptions" 
+              value="+2,350" 
+              description="+180.1% from last month" 
+              icon={<Users className="h-4 w-4 text-muted-foreground" />}
+              trend="up"
+            />
+            <StatsCard 
+              title="Sales" 
+              value="+12,234" 
+              description="+19% from last month" 
+              icon={<CreditCard className="h-4 w-4 text-muted-foreground" />}
+              trend="up"
+            />
+            <StatsCard 
+              title="Active Now" 
+              value="+573" 
+              description="+201 since last hour" 
+              icon={<Activity className="h-4 w-4 text-muted-foreground" />}
+              trend="down"
+            />
+          </div>
+
+          {/* MAIN VISUALIZATION GRID */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+            {/* BIG BAR/AREA CHART */}
+            <Card className="col-span-4 shadow-sm">
+              <CardHeader>
+                <CardTitle>Revenue Stream</CardTitle>
+                <CardDescription>Monthly revenue growth across all regions.</CardDescription>
+              </CardHeader>
+              <CardContent className="pl-2">
+                <OverviewChart />
+              </CardContent>
+            </Card>
+
+            {/* SECONDARY PIE CHART */}
+            <Card className="col-span-3 shadow-sm">
+              <CardHeader>
+                <CardTitle>Sales by Category</CardTitle>
+                <CardDescription>Distribution of product performance.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <PieChartComponent />
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* BOTTOM SECTION: TABLES & ACTIVITY */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+            <Card className="col-span-4 shadow-sm">
+              <CardHeader>
+                <CardTitle>Recent Transactions</CardTitle>
+                <CardDescription>You made 265 sales this month.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <RecentSales />
+              </CardContent>
+            </Card>
+
+            <Card className="col-span-3 shadow-sm border-dashed">
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button className="w-full justify-start text-left font-normal" variant="outline">Create New Invoice</Button>
+                <Button className="w-full justify-start text-left font-normal" variant="outline">Manage Team Access</Button>
+                <Button className="w-full justify-start text-left font-normal" variant="outline">System Configuration</Button>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}
+
+/** * Sub-component for KPI Cards to keep the code clean
+ */
+function StatsCard({ title, value, description, icon, trend }: any) {
+  return (
+    <Card className="shadow-sm">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        {icon}
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{value}</div>
+        <div className="flex items-center text-xs text-muted-foreground mt-1">
+          {trend === "up" ? (
+            <ArrowUpRight className="mr-1 h-3 w-3 text-emerald-500" />
+          ) : (
+            <ArrowDownRight className="mr-1 h-3 w-3 text-rose-
+
+"use client";
+
+import { 
+  ColumnDef, 
+  flexRender, 
+  getCoreRowModel, 
+  useReactTable, 
+  getPaginationRowModel 
+} from "@tanstack/react-table";
+
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+}
+
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) {
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+  });
+
+  return (
+    <div className="rounded-md border bg-white">
+      <table className="w-full text-sm">
+          <table className="w-full text-sm">
+        <thead className="border-b bg-slate-50">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th key={header.id} className="p-4 text-left font-semibold">
+                  {flexRender(header.column.columnDef.header, header.getContext())}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id} className="border-b hover:bg-slate-50">
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id} className="p-4 text-slate-600">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {/* Tombol Pagination */}
+      <div className="flex items-center justify-end space-x-2 p-4">
+        <button onClick={() => table.previousPage()} className="px-3 py-1 border rounded">Prev</button>
+        <button onClick={() => table.nextPage()} className="px-3 py-1 border rounded">Next</button>
+      </div>
+    </div>
+  );
+}
+
+import { Sidebar } from "@/components/dashboard/sidebar";
+import { Navbar } from "@/components/dashboard/navbar";
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="relative flex min-h-screen">
+      {/* Sidebar - Fixed on desktop */}
+      <Sidebar className="hidden w-64 border-r md:block" />
+      
+      <div className="flex-1">
+        <Navbar />
+        <main className="p-6 lg:p-10">
+          {/* Konten Dashboard akan muncul di sini */}
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
+import { Metadata } from "next"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Overview } from "@/components/dashboard/overview"
+import { RecentSales } from "@/components/dashboard/recent-sales"
+import { Sidebar } from "@/components/layout/sidebar"
+
+export default function DashboardPage() {
+  return (
+    <div className="flex h-screen bg-slate-50">
+      <Sidebar className="w-64 border-r bg-white" />
+      
+      <main className="flex-1 p-8 pt-6 overflow-y-auto">
+        <div className="flex items-center justify-between space-y-2 mb-6">
+          <h2 className="text-3xl font-bold tracking-tight">Executive Dashboard</h2>
+          <div className="flex items-center space-x-2">
+            {/* Tombol Aksi: Export, Date Range, dll */}
+          </div>
+        </div>
+
+        {/* Statistik Cepat (KPI Cards) */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">$45,231.89</div>
+              <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+            </CardContent>
+          </Card>
+          {/* Tambahkan card lainnya di sini */}
+        </div>
+
+        {/* Visualisasi Data Kompleks */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-6">
+          <Card className="col-span-4">
+            <CardHeader>
+              <CardTitle>Revenue Overview</CardTitle>
+            </CardHeader>
+            <CardContent className="pl-2">
+              <Overview />
+            </CardContent>
+          </Card>
+          
+          <Card className="col-span-3">
+            <CardHeader>
+              <CardTitle>Recent Transactions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <RecentSales />
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+    </div>
+  )
+}
 </body>
 </html>
